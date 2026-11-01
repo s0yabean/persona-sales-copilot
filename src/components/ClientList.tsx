@@ -1,21 +1,20 @@
 import { useState } from 'react';
-import { Client, PersonalityType } from '../types';
+import { Client } from '../types';
 import { clients } from '../data/clients';
 import { Users, Filter } from 'lucide-react';
 import Avatar from './Avatar';
+import { PERSONALITIES, PersonalityFilter, filterClients } from '../lib/persona';
 
 interface ClientListProps {
   onClientSelect: (client: Client) => void;
 }
 
 export default function ClientList({ onClientSelect }: ClientListProps) {
-  const [selectedPersonality, setSelectedPersonality] = useState<PersonalityType | 'All'>('All');
+  const [selectedPersonality, setSelectedPersonality] = useState<PersonalityFilter>('All');
   
-  const filteredClients = selectedPersonality === 'All' 
-    ? clients 
-    : clients.filter(client => client.personality === selectedPersonality);
+  const filteredClients = filterClients(clients, selectedPersonality);
 
-  const personalities: (PersonalityType | 'All')[] = ['All', 'Knight', 'Explorer', 'Healer', 'Wizard'];
+  const personalities: PersonalityFilter[] = ['All', ...PERSONALITIES];
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
@@ -28,7 +27,7 @@ export default function ClientList({ onClientSelect }: ClientListProps) {
           <Filter className="w-5 h-5 text-gray-500" />
           <select 
             value={selectedPersonality}
-            onChange={(e) => setSelectedPersonality(e.target.value as PersonalityType | 'All')}
+            onChange={(e) => setSelectedPersonality(e.target.value as PersonalityFilter)}
             className="border rounded-md px-3 py-1.5 text-gray-700 focus:ring-2 focus:ring-indigo-500"
           >
             {personalities.map(type => (

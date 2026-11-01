@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { X, Send } from 'lucide-react';
-import { Client, PersonalityType, SalesStage } from '../types';
+import { Client, SalesStage } from '../types';
 import { ThreeDots } from "react-loader-spinner";
-import {prompts} from '../constants/prompts'
+import { SALES_STAGES, roleplaySystemPrompt } from '../lib/persona';
 import ReactMarkdown from 'react-markdown';
 
 
@@ -24,17 +24,8 @@ export default function RoleplayModal({ client, onClose }: RoleplayModalProps) {
   const [loading, setLoading] = useState(false);
   const [hasStartedChat, setHasStartedChat] = useState(false);
   
-  const getPrompt = (personality : PersonalityType, stage : SalesStage) =>{
-    return prompts[personality].salestype[stage];
-  }
-  
-  const salesCyclePrompt = getPrompt(client.personality, stage);
-  const personalityPrompt = prompts[client.personality].prompt;
-  
-  const mainPrompts = `You are a client that is helping a salesperson practice his pitch. This is your personality: ${personalityPrompt}. This is the current sales cycle: ${salesCyclePrompt}`
-  
   const [conversationMessage, setConversationMessage] = useState<{ role: string; content: string }[]>([
-    { role: 'system', content: mainPrompts },
+    { role: 'system', content: roleplaySystemPrompt(client.personality, stage) },
   ]);
   
   const fetchApiResponse = async () => {
@@ -80,11 +71,8 @@ export default function RoleplayModal({ client, onClose }: RoleplayModalProps) {
     setMessages([]);
     
     // Reset conversation with new stage prompt
-    const newSalesCyclePrompt = getPrompt(client.personality, newStage);
-    const newMainPrompt = `You are a client that is helping a salesperson practice his pitch. This is your personality: ${personalityPrompt}. This is the current sales cycle: ${newSalesCyclePrompt}`;
-    
     setConversationMessage([
-      { role: 'system', content: newMainPrompt }
+      { role: 'system', content: roleplaySystemPrompt(client.personality, newStage) }
     ]);
   };
 
@@ -117,10 +105,9 @@ export default function RoleplayModal({ client, onClose }: RoleplayModalProps) {
                 onChange={(e) => handleStageChange(e.target.value as SalesStage)}
                 className="w-full p-2 border rounded-md"
               >
-                <option value="Not Approached">Not Approached</option>
-                <option value="Opening Appointment">Opening Appointment</option>
-                <option value="Closing Appointment">Closing Appointment</option>
-                <option value="Done Deal">Done Deal</option>
+                {SALES_STAGES.map((value) => (
+                  <option key={value} value={value}>{value}</option>
+                ))}
               </select>
             </div>
           </div>

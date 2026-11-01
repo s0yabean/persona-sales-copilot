@@ -1,4 +1,5 @@
 import { PersonalityType } from '../types';
+import { initials as toInitials } from '../lib/persona';
 
 // Initials avatar. The demo uses synthetic clients, so it shows no photos of real people.
 const palette: Record<PersonalityType, string> = {
@@ -15,12 +16,7 @@ interface AvatarProps {
 }
 
 export default function Avatar({ name, personality, size = 'md' }: AvatarProps) {
-  const initials = name
-    .split(' ')
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase();
+  const initials = toInitials(name);
   const dims = size === 'lg' ? 'w-16 h-16 text-xl border-2 border-white shadow-lg' : 'w-12 h-12 text-base';
   return (
     <div
