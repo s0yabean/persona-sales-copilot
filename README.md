@@ -1,5 +1,7 @@
 # persona-sales-copilot
 
+[![CI](https://github.com/s0yabean/persona-sales-copilot/actions/workflows/ci.yml/badge.svg)](https://github.com/s0yabean/persona-sales-copilot/actions/workflows/ci.yml)
+
 A sales-copilot demo for bank relationship managers: each client carries a persona type, and the app turns that type into a recommended product, a roleplay partner to practise on, a talking-point report and outreach templates.
 
 Built while CTO of Mindreader, on Mindreader's persona framework, the Human Intelligence System (HIS). It was used in pitches to banks and insurers. This public version uses synthetic data only.
