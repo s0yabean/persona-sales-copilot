@@ -74,7 +74,10 @@ npm run build
 npm run preview      # http://localhost:4173
 npm run typecheck
 npm run lint
+npm test             # vitest, no key or network needed
 ```
+
+The tests cover the persona logic (client filtering, the prompt for each type and stage, the manager-view funnel rates), the chat route's mock and keyed paths with a stubbed `fetch`, and a production build made with a sentinel `LLM_API_KEY` in the environment, which must not appear in the bundle.
 
 ## Repo layout
 
@@ -87,8 +90,10 @@ src/
   components/         ClientList, ClientDetails, RoleplayModal, FiscalReportModal,
                       FacebookAdsModal (engagement templates), ManagerDashboard, Avatar
   constants/prompts.ts  roleplay prompts: 4 types x 4 sales stages
-  data/               SYNTHETIC clients, products, type traits, marketing copy
+  data/               SYNTHETIC clients, RM pipeline stats, products, type traits, marketing copy
+  lib/persona.ts      pure logic: client filter, roleplay prompt, funnel rates, initials
   types/              shared TypeScript types
+test/                 vitest: persona logic, chat route, no key in the client bundle
 docs/screenshots/     README images
 ```
 
